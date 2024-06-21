@@ -1,3 +1,5 @@
+import { FRUITS } from "./fruits.js";
+
 var Engine = Matter.Engine,
     Render = Matter.Render,
     Runner = Matter.Runner,
@@ -39,6 +41,7 @@ const ground = Bodies.rectangle(310, 820, 620, 60, {
 
 const topLine = Bodies.rectangle(310, 150, 620, 2, {
     isStatic: true,
+    isSensor: true,
     render: {fillStyle:'#E6B143'}
 })
 
@@ -46,4 +49,33 @@ World.add(world, [leftWall,rightWall,ground,topLine])
 
 Render.run(render);
 Runner.run(engine);
+
+//현재 과일 값을 저장할 변수 생성
+let currentBody = null;
+let currentFruit = null;
+//과일 떨어지는 함수 만들기
+function addFruit(){
+    //과일 index 저장
+    const index = Math.floor(Math.random()*5);
+
+    
+
+    const fruit = FRUITS[index];
+
+    const body = Bodies.circle(300, 50, fruit.radius, {
+        index : index,
+        isSleeping: true,
+        render: {
+            sprite : {texture: `${fruit.name}.png`},
+        },
+        restitution: 0.2
+    });
+
+    currentBody = body;
+    currentFruit = fruit;
+
+    World.add(world,body)
+}
+
+addFruit();
 
